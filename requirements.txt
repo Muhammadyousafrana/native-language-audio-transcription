@@ -1,0 +1,8 @@
+black
+pylint
+# pytest
+click
+#fire
+fastapi
+uvicorn[standard]
+pydantic
