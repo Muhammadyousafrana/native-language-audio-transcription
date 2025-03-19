@@ -4,6 +4,7 @@ librosa
 soundfile
 ffmpeg-python
 huggingface_hub
+python-multipart
 # pytest
 click
 #fire
