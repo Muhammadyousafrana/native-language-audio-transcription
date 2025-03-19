@@ -1,3 +1,4 @@
+import os
 import tempfile
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from huggingface_hub import InferenceClient
@@ -8,7 +9,12 @@ app = FastAPI()
 # Hugging Face API Key (Replace with your actual key)
 HF_API_KEY = "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"
 
-@app.post("/transcribe/")
+@app.get("/")
+async def root():
+    """Root endpoint to check if the API is running."""
+    return {"message": "Welcome to the Transcription API. Use /transcribe to upload and process files."}
+
+@app.post("/transcribe")
 async def transcribe(file: UploadFile = File(...)):
     """Endpoint to process and transcribe audio or video files."""
     try:
@@ -34,3 +40,9 @@ async def transcribe(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
+
+# Ensure app runs on Heroku's assigned port
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8080))  # Default to 8080 if not set
+    uvicorn.run(app, host="0.0.0.0", port=port)

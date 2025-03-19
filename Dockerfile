@@ -1,7 +1,7 @@
-# Use the AWS Lambda Python base image
-#FROM public.ecr.aws/lambda/python:3.12
+# Use a Python base image
 FROM python:3.10
-# Set the working directory to /app
+
+# Set the working directory
 WORKDIR /app
 
 # Copy the application code and dependencies
@@ -12,10 +12,8 @@ COPY my_lib /app/my_lib
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the FastAPI default port
+# Expose the Heroku dynamic port (Not needed, but for reference)
 EXPOSE 8080
 
-# Command to run the FastAPI app
-
-ENTRYPOINT ["uvicorn"]
-CMD ["main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1"]
+# Default command for Heroku, using the dynamic port
+CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "main:app", "--bind", "0.0.0.0:${PORT}"]
