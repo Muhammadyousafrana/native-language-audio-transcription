@@ -40,9 +40,3 @@ async def transcribe(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
-
-# Ensure app runs on Heroku's assigned port
-if __name__ == "__main__":
-    import uvicorn
-    port = int(os.environ.get("PORT", 80))  # Default to 8080 if not set
-    uvicorn.run(app, host="0.0.0.0", port=port)
