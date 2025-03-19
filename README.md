@@ -1,3 +1,4 @@
+[![CI](https://github.com/Muhammadyousafrana/audio_transcription/actions/workflows/main.yml/badge.svg)](https://github.com/Muhammadyousafrana/audio_transcription/actions/workflows/main.yml)
 # audio_transcription
 transcribe the audio into the native language
 ```bash
