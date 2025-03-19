@@ -17,4 +17,4 @@ deploy:
 	docker tag wikipedia:latest 354918363202.dkr.ecr.us-east-1.amazonaws.com/wikipedia:latest
 	docker push 354918363202.dkr.ecr.us-east-1.amazonaws.com/wikipedia:latest
 	
-all: install test lint format deploy
+all: install lint format
