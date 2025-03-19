@@ -1,5 +1,9 @@
 black
 pylint
+librosa
+soundfile
+ffmpeg-python
+huggingface_hub
 # pytest
 click
 #fire
