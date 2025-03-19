@@ -1,8 +1,8 @@
+import io
+import tempfile
+import subprocess
 import librosa
 import soundfile as sf
-import subprocess
-import os
-import io
 
 def is_audio_file(file_path: str) -> bool:
     """Check if the file is an audio file based on its extension."""
@@ -22,7 +22,7 @@ def reduce_audio_size(audio_bytes: bytes, target_sr: int = 16000) -> bytes:
         y, sr = librosa.load(audio_io, sr=None)
 
         # Downsample to target sample rate and convert to mono
-        y_resampled = librosa.resample(y, orig_sr=sr, target_sr=target_sr)
+        y_resampled = librosa.core.resample(y, orig_sr=sr, target_sr=target_sr)
         y_mono = librosa.to_mono(y_resampled)
 
         # Save to in-memory file
@@ -33,36 +33,32 @@ def reduce_audio_size(audio_bytes: bytes, target_sr: int = 16000) -> bytes:
         return output_io.read()
 
     except Exception as e:
-        raise RuntimeError(f"Error processing audio: {e}")
+        raise RuntimeError(f"Error processing audio: {e}") from e
 
 def extract_audio_from_video(video_path: str, target_sr: int = 16000) -> bytes:
     """Extracts audio from a video file, reduces its size, and returns it as bytes."""
     try:
-        output_audio_path = "temp_audio.wav"
+        with tempfile.NamedTemporaryFile(delete=True, suffix=".wav") as temp_audio:
+            # Extract audio using FFmpeg
+            command = [
+                "ffmpeg",
+                "-i", video_path,
+                "-vn",  # Disable video
+                "-acodec", "pcm_s16le",
+                "-ar", str(target_sr),
+                "-ac", "1",
+                temp_audio.name
+            ]
+            subprocess.run(command, check=True)
 
-        # Extract audio using FFmpeg
-        command = [
-            "ffmpeg",
-            "-i", video_path,
-            "-vn",  # Disable video
-            "-acodec", "pcm_s16le",
-            "-ar", str(target_sr),
-            "-ac", "1",
-            output_audio_path
-        ]
-        subprocess.run(command, check=True)
+            # Read and process audio file
+            temp_audio.seek(0)
+            audio_bytes = temp_audio.read()
 
-        # Read and process audio file
-        with open(output_audio_path, "rb") as f:
-            audio_bytes = f.read()
-
-        # Remove temporary file
-        os.remove(output_audio_path)
-
-        return reduce_audio_size(audio_bytes, target_sr)
+            return reduce_audio_size(audio_bytes, target_sr)
 
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"FFmpeg error: {e}")
+        raise RuntimeError(f"FFmpeg error: {e}") from e
 
     except Exception as e:
-        raise RuntimeError(f"Error processing video: {e}")
+        raise RuntimeError(f"Error processing video: {e}") from e
