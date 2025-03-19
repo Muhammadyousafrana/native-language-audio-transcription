@@ -1,4 +1,3 @@
-import os
 import tempfile
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from huggingface_hub import InferenceClient
