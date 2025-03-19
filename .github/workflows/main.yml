@@ -28,7 +28,7 @@ jobs:
 
     - name: Lint code
       run: |
-        pylint --disable=R,C,E0602,E1120 wikibot.py
+        pylint --disable=R,C,E0602,E1120 main.py my_lib/*.py
 
     - name: Format code
       run: |
