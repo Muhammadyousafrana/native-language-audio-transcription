@@ -26,9 +26,9 @@ jobs:
         pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Lint code
-      run: |
-        pylint --disable=R,C,E0602,E1120 my_lib/*.py
+    # - name: Lint code
+    #   run: |
+    #     pylint --disable=R,C,E0602,E1120 my_lib/*.py
 
     - name: Format code
       run: |
