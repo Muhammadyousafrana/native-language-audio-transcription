@@ -1,14 +1,10 @@
-black
-pylint
 librosa
 soundfile
 ffmpeg-python
 huggingface_hub
 python-multipart
 gunicorn
-# pytest
-click
-#fire
 fastapi
 uvicorn[standard]
 pydantic
+resampy
