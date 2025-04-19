@@ -13,7 +13,7 @@ from my_lib.transcribe import (
 app = FastAPI()
 
 # Hugging Face API Key (Replace with your actual key)
-HF_API_KEY = "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"
+HF_API_KEY = "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"
 
 @app.get("/")
 async def root():
